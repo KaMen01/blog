@@ -1,0 +1,37 @@
+{
+  "hints": [],
+  "groups": [
+    {
+      "sourceType": "com.duellinkes.blog.config.AuthProperties",
+      "name": "jwt",
+      "type": "com.duellinkes.blog.config.AuthProperties"
+    }
+  ],
+  "properties": [
+    {
+      "sourceType": "com.duellinkes.blog.config.AuthProperties",
+      "name": "jwt.cookie-name",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "com.duellinkes.blog.config.AuthProperties",
+      "name": "jwt.expire",
+      "type": "java.lang.Integer"
+    },
+    {
+      "sourceType": "com.duellinkes.blog.config.AuthProperties",
+      "name": "jwt.pri-key-path",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "com.duellinkes.blog.config.AuthProperties",
+      "name": "jwt.pub-key-path",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "com.duellinkes.blog.config.AuthProperties",
+      "name": "jwt.secret",
+      "type": "java.lang.String"
+    }
+  ]
+}

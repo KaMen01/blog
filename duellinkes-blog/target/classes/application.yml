@@ -1,0 +1,17 @@
+server:
+  port: 10001
+spring:
+  application:
+    name: duellinkes-blog
+  datasource:
+    url: jdbc:mysql://localhost:3306/project_blog
+    username: root
+    password: 2008nzgwc
+mybatis:
+  type-aliases-package: com.duellinkes.blog.pojo
+jwt:
+  secret: km_blogKKK@163.4396
+  cookieName: BLOG_JWT
+  pubKeyPath: C:\\Users\\LEGION\\Desktop\\java文档\\测试公钥私钥放这边\\blogRsa.pub
+  priKeyPath: C:\\Users\\LEGION\\Desktop\\java文档\\测试公钥私钥放这边\\blogRsa.pri
+  expire: 30 #min

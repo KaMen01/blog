@@ -1,0 +1,14 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="duellinkes-blog:war">
+    <output-path>$PROJECT_DIR$/duellinkes-blog/target</output-path>
+    <properties id="maven-jee-properties">
+      <options>
+        <module>duellinkes-blog</module>
+        <packaging>war</packaging>
+      </options>
+    </properties>
+    <root id="archive" name="duellinkes-blog-1.0.0-SNAPSHOT.war">
+      <element id="artifact" artifact-name="duellinkes-blog:war exploded" />
+    </root>
+  </artifact>
+</component>
