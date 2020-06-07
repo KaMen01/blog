@@ -1,0 +1,473 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org"></html>
+<head>
+  <meta charset="UTF-8">
+  <!-- import CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+  <!-- import Vue before Element -->
+  <script src="https://unpkg.com/vue/dist/vue.js"></script>
+  <!-- import JavaScript -->
+  <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+</head>
+<body>
+<div id="app">
+  <el-row>
+    <el-col>
+      <el-menu
+              :default-active="activeIndex"
+              class="el-menu-demo"
+              mode="horizontal"
+              @select="handleSelect"
+      >
+        <el-menu-item index="1">
+          <a href="http://www.duellinkes.com/#/blog-layout/home">首页</a>
+        </el-menu-item>
+        <el-submenu index="2">
+          <template slot="title">我的工作台</template>
+          <el-menu-item index="2-1">
+            <a>
+              博客详情页
+            </a>
+          </el-menu-item>
+          <el-menu-item index="2-2">选项2</el-menu-item>
+          <el-menu-item index="2-3">选项3</el-menu-item>
+          <el-submenu index="2-4">
+            <template slot="title">选项4</template>
+            <el-menu-item index="2-4-1">选项1</el-menu-item>
+            <el-menu-item index="2-4-2">选项2</el-menu-item>
+            <el-menu-item index="2-4-3">选项3</el-menu-item>
+          </el-submenu>
+        </el-submenu>
+        <el-menu-item index="3" disabled>消息中心</el-menu-item>
+        <el-menu-item index="4">
+          <!-- target="_blank" -->
+          <a>写博客</a>
+        </el-menu-item>
+
+        <el-menu-item>
+          <el-input placeholder="请输入内容" v-model="input"></el-input>
+        </el-menu-item>
+
+        <!--<el-menu-item index="5" style="float:right" v-if="user.username==''">注册</el-menu-item>-->
+        <!-- 点击时，有登录弹出框 -->
+        <!--<el-menu-item index="6" style="float:right;" @click="login">-->
+          <!--<a href="javascrip:void(0)" v-if="user.username==''">登陆</a>-->
+        <!--</el-menu-item>-->
+        <!-- 登陆 -->
+        <el-dialog
+                title="登陆"
+                :visible.sync="dialogTableVisible"
+                center
+                :append-to-body="true"
+                :lock-scroll="false"
+                width="30%"
+        >
+          <!-- 子类向父类传递消息数据 -->
+          <Login @userData="parentUser($event)"></Login>
+        </el-dialog>
+
+
+        <el-menu-item index="7" style="float:right" v-if="user.username!=''">{{user.username}}</el-menu-item>
+        <el-menu-item index="8" style="float:right" v-if="user.username!=''">消息</el-menu-item>
+
+
+      </el-menu>
+    </el-col>
+    <!-- blogDetail -->
+    <el-col :span="24">
+      <div class="main">
+        <el-row>
+          <el-col :md="3" :lg="6" :xl="8" class="hidden-sm-and-down">&nbsp;</el-col>
+          <el-col :sm="24" :md="18" :lg="12" :xl="8">
+            <div class="center" th:utext="${blogContent}">
+              <h1><a id="_0"></a>我是啥</h1>
+              <p>哈哈哈哈</p>
+            </div>
+          </el-col>
+          <el-col :md="3" :lg="6" :xl="8" class="hidden-sm-and-down">&nbsp;</el-col>
+        </el-row>
+      </div>
+    </el-col>
+  </el-row>
+</div>
+
+</body>
+
+<template id="login">
+  <div>
+    <section>
+      <el-container>
+        <el-form label-width="120px" :model="User" ref="User" >
+          <el-row>
+            <el-col>
+              <el-form-item label="账号" prop="phone">
+                <el-input v-model.number="User.phone" ></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col>
+              <el-form-item label="密码" prop="password">
+                <el-input type="password" v-model="User.password" auto-complete="new-password"></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col>
+              <el-form-item label="记住密码" prop="delivery">
+                <el-switch v-model="User.delivery"></el-switch>
+              </el-form-item>
+            </el-col>
+          </el-row>
+
+        </el-form>
+
+      </el-container>
+      <div class="dialog-footer" style="margin: 0 auto;text-align: center;">
+        <div class="pwwd">
+          <a href="">忘记密码</a>
+          <a href="">注册账号</a>
+        </div>
+        <!-- login后将数据传给父组件 -->
+        <el-button type="primary" @click="login()">登 录</el-button>
+        <el-button>取 消</el-button>
+      </div>
+
+    </section>
+  </div>
+</template>
+<script th:inline="javascript">
+    const blogContent = /*[[${blogContent}]]*/ []
+    console.log(blogContent);
+</script>
+
+<script>
+    new Vue({
+        el: "#app",
+        data() {
+            return {
+                activeIndex: "1",
+                isCollapse: true,
+                input: "",
+                dialogTableVisible: false,
+                html: "",
+                user: {
+                    username: "",
+                    phone: "",
+                    password: ""
+                }
+            }
+        },
+        methods:{
+            handleSelect(key, keyPath) {
+                console.log(key, keyPath);
+            },
+            login() {
+                this.dialogTableVisible = true; //默认页面不显示为false,点击按钮将这个属性变成true
+            },
+        },
+        components:{
+            'Login':{
+                template:'#login',
+                data(){
+                    return{
+                        User:{
+                            username:'',
+                            phone:'',
+                            password:'',
+                            delivery:false,//这是自动登陆
+                        }
+                    }
+                },
+                methods:{
+                    login(){
+                        this.$axios.post("/user/login",this.User).then((resp)=>{
+
+                            this.User = resp.data;
+                            // console.log(sessionStorage.getItem("user"));
+                            this.$emit('userData',this.User);
+                        }).catch(()=>{
+                            alert("登陆失败")
+                        })
+                    }
+                }
+            }
+        }
+    })
+</script>
+<style>
+  .el-switch__core{
+    margin: 20px 0px 0px 0px;
+  }
+  .main {
+    padding: 10px 30px;
+    text-align: left;
+  }
+  blockquote {
+    border-left: #eee solid 5px;
+    padding-left: 15px;
+    color: #8e8e8e;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+  }
+  ul li {
+    line-height: 25px;
+  }
+  pre code {
+    background: #F6F6F6;
+  }
+  p code {
+    color: #D34B62;
+    background: #F6F6F6;
+    margin: 0 2px;
+  }
+
+  @keyframes squeezeBody {
+    from {
+      width: 100%;
+    }
+    to {
+      width: calc(100% - 300px);
+    }
+  }
+
+  @-webkit-keyframes squeezeBody {
+    from {
+      width: 100%;
+    }
+    to {
+      width: calc(100% - 300px);
+    }
+  }
+
+  @keyframes stretchBody {
+    from {
+      width: calc(100% - 300px);
+    }
+    to {
+      width: 100%;
+    }
+  }
+
+  @-webkit-keyframes stretchBody {
+    from {
+      width: calc(100% - 300px);
+    }
+    to {
+      width: 100%;
+    }
+  }
+
+  .squeezed-body {
+    animation: squeezeBody 0.5s ease;
+    -webkit-animation: squeezeBody 0.5s ease;
+    width: calc(100% - 300px);
+  }
+
+  .full-body {
+    animation: stretchBody 0.5s ease;
+    -webkit-animation: stretchBody 0.5s ease;
+    width: 100%;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: 'Old Standard TT', serif;
+    font-weight: bold;
+  }
+
+  h1 {
+    border-bottom: 1px solid #ddd;
+  }
+
+  .serif {
+    font-family: 'Old Standard TT', serif;
+  }
+
+  .top-bar {
+    height: 45px;
+    min-height: 45px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+  }
+
+  .bars-lnk {
+    color: #fff;
+  }
+
+  .bars-lnk i {
+    display: inline-block;
+    margin-left: 10px;
+    margin-top: 7px;
+  }
+
+  .bars-lnk img {
+    display: inline-block;
+    margin-left: 10px;
+    margin-top: -15px;
+    margin-right: 15px;
+    height: 35px;
+  }
+
+  .lateral-menu {
+    background-color: #333;
+    color: rgb(144, 144, 144);
+    width: 300px;
+    font-family: 'Open Sans', 'Myriad Pro', 'Lucida Grande', 'Lucida Sans Unicode', 'Lucida Sans', Geneva, Verdana, sans-serif;
+  }
+
+  .lateral-menu label {
+    color: rgb(144, 144, 144);
+  }
+
+  .lateral-menu-content {
+    padding-left: 10px;
+    height: 100%;
+    font-size: 12px;
+    font-style: normal;
+    font-variant: normal;
+    font-weight: bold;
+    line-height: 16px;
+  }
+
+  .lateral-menu-content .title {
+    padding-top: 15px;
+    font-size: 2em;
+    height: 45px;
+  }
+
+  .lateral-menu-content-inner {
+    overflow-y: auto;
+    height: 100%;
+    padding-top: 10px;
+    padding-bottom: 50px;
+    padding-right: 10px;
+    font-size: 0.9em;
+  }
+
+  .container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: stretch;
+    width: 100%;
+    height: 100%;
+    padding-top: 65px;
+  }
+
+  .container>* {
+    display: block;
+    width: 50%;
+    margin-left: 10px;
+    margin-right: 10px;
+    max-height: 100%;
+  }
+
+  .container textarea {
+    resize: none;
+    font-family: Consolas, "Liberation Mono", Courier, monospace;
+    height: 97%;
+    max-height: 97%;
+    width: 45%;
+  }
+
+  #preview {
+    height: 97%;
+    max-height: 97%;
+    border: 1px solid #eee;
+    overflow-y: scroll;
+    width: 55%;
+    padding: 10px;
+  }
+
+  pre {
+    white-space: pre-wrap;
+    /* css-3 */
+    white-space: -moz-pre-wrap;
+    /* Mozilla, since 1999 */
+    white-space: -pre-wrap;
+    /* Opera 4-6 */
+    white-space: -o-pre-wrap;
+    /* Opera 7 */
+    word-wrap: break-word;
+    /* Internet Explorer 5.5+ */
+    background-color: #f8f8f8;
+    border: 1px solid #dfdfdf;
+    margin-top: 1.5em;
+    margin-bottom: 1.5em;
+    padding: 0.125rem 0.3125rem 0.0625rem;
+  }
+
+  pre {
+    padding: 16px;
+    overflow: auto;
+    font-size: 85%;
+    line-height: 1.45;
+    background-color: #f6f8fa;
+    border-radius: 3px;
+  }
+
+  .modal-wrapper {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: 999;
+    background-color: rgba(51, 51, 51, 0.5);
+  }
+
+  .modal-inner {
+    margin-top: 200px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 600px;
+    height: 225px;
+    background-color: #fff;
+    opacity: 1;
+    z-index: 1000;
+  }
+
+  .modal-close-btn {
+    float: right;
+    /* display: inline-block; */
+    margin-right: 5px;
+    color: #ff4336;
+  }
+
+  .modal-close-btn:hover {
+    float: right;
+    /* display: inline-block; */
+    margin-right: 5px;
+    color: #8d0002;
+  }
+
+  .modal-topbar {
+    clear: both;
+    height: 25px;
+  }
+
+  .modal-inner .link-area {
+    margin: 10px;
+    height: 170px;
+  }
+
+  .modal-inner textarea {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+  }
+
+  .version {
+    color: white;
+    font-size: 0.8em !important;
+  }
+</style>
+</html>
